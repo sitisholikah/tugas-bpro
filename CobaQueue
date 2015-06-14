@@ -1,0 +1,25 @@
+import java.util.*;
+public class CobaQueue
+	{
+	public static void main(String[]args)
+		{
+    		Queue<String> data = new LinkedList<String>();
+			
+			int i;   
+    		
+			data.offer("A");
+    		data.offer("B");
+    		data.offer("C"); 
+    		data.offer("D"); 
+    		data.offer("E"); 
+    		
+			i=1;
+    		
+			do
+			{
+      			System.out.println("Ini Adalah Urutan QUEUE "+ i + " : " +data.poll());
+      			i++;
+    		}
+		while(data.size() != 0);
+	}
+}
