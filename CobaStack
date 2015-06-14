@@ -1,0 +1,21 @@
+import java.util.*;
+public class CobaStack
+	{
+	public static void main(String[]args)
+		{
+    		Stack<String> data = new Stack<String>();
+		int i;   
+    		data.push("A");
+    		data.push("B");
+    		data.push("C"); 
+    		data.push("D"); 
+    		data.push("E"); 
+    		i=1;
+    		do
+			{
+      			System.out.println("Ini adalah Urutan Stack ke"+ i + " : " +data.pop());
+      			i++;
+    		}
+		while(data.empty() == false);
+	}
+}
