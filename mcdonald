@@ -1,0 +1,751 @@
+import java.util.*;
+import java.io.*;
+import java.text.*;
+import java.math.*;
+
+public class mcdonald
+	{
+	public static Vector<Vector> brg = new Vector<Vector>();
+	public static Vector<Vector> printstr = new Vector<Vector>();
+	public static Vector<Vector> histori = new Vector<Vector>();
+  
+	public static String [] user = {"kasir", "siti"};
+	public static String [] pass = {"kasir", "sholikah"};
+
+	public static void login()
+		{
+			int login = -1;
+			int x = 0;
+			Scanner masuk = new Scanner(System.in);
+			do
+				{
+					System.out.println("---------------------");
+					System.out.println("Login Terlebih Dahulu");
+					System.out.println("---------------------");
+					
+					System.out.print("Username : ");
+					String username = masuk.next();
+					
+					System.out.print("Password : ");
+					String password = masuk.next();
+					
+					for (x=0; x<user.length; x++)
+						{
+							if((username.equals(user[x]))&&(password.equals(pass[x])))
+								{
+									login = x;
+									garis();
+									System.out.println("  MC Donald's Semolowaru");
+								}
+						}
+				}
+			while(login == -1);
+		}
+		
+	public static Vector<Object> tbarang (String nb,int hj,int hb) //tambah barang
+		{
+			Vector <Object> barang = new Vector<Object>();
+			barang.addElement(nb);
+			barang.addElement(String.valueOf(hj)); //untuk mengkonversi ke string 
+			barang.addElement(String.valueOf(hb));
+			return barang;
+		}
+	
+	public static Vector<Object> cetak(String nb,int h,int j,int ht) //cetak struk 
+		{
+			Vector <Object> struk = new Vector<Object>();
+			struk.addElement(nb);
+			struk.addElement(h);
+			struk.addElement(j);
+			struk.addElement(ht);
+			return struk;
+		}
+	
+	public static Vector<Object> datapen(int kodebrg, String tgl, String bar, int jmlbrg) //data penjualan
+		{
+			Vector <Object> datapenj = new Vector<Object>();
+			datapenj.addElement(kodebrg);
+			datapenj.addElement(tgl);
+			datapenj.addElement(bar);
+			datapenj.addElement(jmlbrg);
+			return datapenj;
+		}
+	
+	public static String getTanggal() 
+		{  
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");  
+			Date date = new Date();  
+			return dateFormat.format(date);  
+		}  
+	
+	public static void garis()
+		{
+			System.out.println("*************************");
+		}
+		
+	public static void garis2()
+		{
+			System.out.println("=========================");
+		}
+	
+	public static void main(String[]args) throws IOException
+		{
+		BufferedReader ii = new BufferedReader(new InputStreamReader(System.in));
+		Scanner i = new Scanner(System.in);
+		
+		Vector<Vector> v = new Vector<Vector>();
+		brg.addElement(tbarang("Burger",20000,18000));
+		brg.addElement(tbarang("Pizza",45000,43000));
+		brg.addElement(tbarang("IceCream",9000,7500));
+		
+		int jumbrg = brg.size();
+		int jml = 0;
+		int logout = 0;
+		int untung = 0 ;
+		int keluar = 0;
+		int b = 0;
+		String stransaksi = "x"; //untuk menyimpan transaksi
+		
+		while(keluar == 0)
+			{
+			login();
+			logout = 0;
+			while(logout == 0)
+				{
+				garis();
+				System.out.println("1. Beli Makanan");
+				System.out.println("2. Tambah Data Makanan");
+				System.out.println("3. Hapus Data Makanan");
+				System.out.println("4. Cek Data Makanan");
+				System.out.println("5. Pendapatan Mc Donald's");
+				System.out.println("6. Edit Data Makanan");
+				System.out.println("7. Cari Data Makanan");
+				System.out.println("8. Data Penjualan Mc Donald's");
+				System.out.println("9. Log Out");
+				System.out.println("10. Keluar");
+				
+				System.out.print("Masukkan pilihan (1 - 10) : ");
+				int pilihan = i.nextInt();
+				System.out.println("----------------------------");
+				
+				switch (pilihan)
+					{
+					case 1:
+						Vector<String> struk = new Vector<String>();
+						int lagi = 1;
+						String tanggal ="tgl"; //harus di deklarasikan
+						
+						int kodebrg = 0;
+						kodebrg = (int)(Math.random()*10000);
+						
+						int t = 0;
+						garis();
+						System.out.println("      Daftar Makanan");
+						garis();
+						System.out.println();
+						for (int a = 0 ; a < jumbrg ; a++)
+							{
+							System.out.print(a+1 +". ");
+							System.out.print(brg.elementAt(a).elementAt(0) + "\t" +" Rp " +brg.elementAt(a).elementAt(1));
+							System.out.println();
+							}
+						garis();
+						while(lagi == 1)
+						{
+							System.out.print("Masukkan nomor makanan yg akan dibeli : ");
+							int nomorbar = i.nextInt()-1;
+							
+							System.out.print("Masukkan jumlah makanan yg akan dibeli : ");
+							int jmlbar = i.nextInt();
+							
+							int totalhrg = jmlbar * Integer.valueOf((String) brg.elementAt(nomorbar).elementAt(1));
+
+							printstr.addElement(cetak((String)brg.elementAt(nomorbar).elementAt(0) /*namabrg*/, 
+										  Integer.valueOf((String)brg.elementAt(nomorbar).elementAt(1)) /*hargabrg*/,
+										  jmlbar /*jumlahbrg*/,
+										  totalhrg /*totalhargaperbrg*/));	//penyimpanan transaksi
+							
+							System.out.println(brg.elementAt(nomorbar).elementAt(0) +" " +jmlbar +" porsi : " +totalhrg);
+							
+							t += totalhrg;
+							
+							untung += jmlbar * (Integer.valueOf((String) brg.elementAt(nomorbar).elementAt(1)) - Integer.valueOf((String) brg.elementAt(nomorbar).elementAt(2)));
+						
+							histori.addElement(datapen(kodebrg,getTanggal(),(String)brg.elementAt(nomorbar).elementAt(0),jmlbar));
+							
+							int lg = 0;
+							while (lg==0)
+								{
+									System.out.print("Apakah anda ingin beli lagi? (1 = YA _ 0 = TIDAK) --> ");
+									lagi = i.nextInt();
+									if((lagi == 0) || (lagi==1))
+										{
+											lg = 1;
+										}
+									else
+										{
+											System.out.print("Angka yang anda masukkan salah");
+											lg=0;
+										}
+								}
+						}
+							garis();
+							System.out.println("  Struk Pembelian ");
+							garis();
+							
+							while( b < printstr.size())
+								{
+								stransaksi = (printstr.elementAt(b).elementAt(0) +" (" +printstr.elementAt(b).elementAt(2) +") " +"\t" +" = " +printstr.elementAt(b).elementAt(3));
+								System.out.println(printstr.elementAt(b).elementAt(0) +" (" +printstr.elementAt(b).elementAt(2) +") " +"\t" +" = " +printstr.elementAt(b).elementAt(3));
+								b++;
+								tanggal = getTanggal();
+								}
+						garis();
+						System.out.println("Total " +"\t" +"\t" +" = "+t);
+						garis2();
+
+						System.out.println(tanggal);
+						System.out.println("Kode Transaksi : "+kodebrg);
+						break;
+					
+					case 2:
+						System.out.print("Masukkan Jumlah Makanan Baru : ");
+						jml = i.nextInt();
+						
+						jumbrg += jml;
+						for (int a = 0 ; a < jml ; a++)
+							{
+								System.out.print("Masukkan Nama Makanan : ");
+								String nb = i.next();
+								System.out.print("Masukkan Harga Jual :");
+								int hj = i.nextInt();
+								System.out.print("Masukkan Harga Beli :");
+								int hb = i.nextInt();
+							
+								brg.addElement(tbarang(nb,hj,hb));
+							}
+						break;
+					
+					case 3:
+						System.out.println("      Menu Makanan");
+						garis();
+						System.out.println();
+						for (int a = 0 ; a < jumbrg ; a++)
+							{
+							System.out.print(a+1 +"  ");
+							System.out.print(brg.elementAt(a).elementAt(0) + "\t" +" @Rp " +brg.elementAt(a).elementAt(1));
+							System.out.println();
+							}
+						garis();
+						lagi = 1;
+						while (lagi == 1)
+							{
+								System.out.print("Masukkan no makanan yg akan dihapus : ");
+								int hapus = i.nextInt()-1;
+								jumbrg -= 1;
+								brg.removeElementAt(hapus);
+								int lg = 0;
+								while (lg==0)
+									{
+										System.out.print("Apakah akan menghapus lagi ? (1 = YA _ 0 = TIDAK) --> ");
+										lagi = i.nextInt();
+										if((lagi == 0) || (lagi==1))
+											{
+												lg = 1;
+											}
+										else
+											{
+												System.out.print("Angka yang anda masukkan salah");
+												lg=0;
+											}
+									}
+							}
+						break;
+					
+					case 4:
+						garis();
+						System.out.println("      Daftar Makanan");
+						garis();
+						System.out.print("No ");
+						System.out.print("Nama Makanan     " +"\t");
+						System.out.print("Harga Jual" +"\t");
+						System.out.println("Harga Beli");
+						
+						for (int a = 0 ; a < jumbrg ; a++)
+							{
+								System.out.print(a+1 +". ");
+								for (b = 0 ; b < brg.elementAt(a).size() ; b++)
+									{	
+										System.out.print(brg.elementAt(a).elementAt(b) + "\t" + "\t");
+									}
+								System.out.println();
+							}
+						
+						System.out.println();
+						System.out.print("Tekan enter untuk kembali");
+						ii.readLine();
+						break;
+					
+					case 5:
+						garis();
+						System.out.println("Laba bersih : Rp " +untung);
+						garis();
+						break;
+					
+					case 6:
+						System.out.println("      Daftar Makanan");
+						garis();
+						System.out.println();
+						for (int a = 0 ; a < jumbrg ; a++)
+							{
+							System.out.print(a+1 +". ");
+							System.out.print(brg.elementAt(a).elementAt(0) + "\t" +" @Rp " +brg.elementAt(a).elementAt(1));
+							System.out.println();
+							}
+						garis();
+						System.out.print("Masukkan no makanan yang akan diedit :");
+						int editnama = i.nextInt();
+						System.out.print("Masukkan harga jual :");
+						int editjual = i.nextInt();
+						System.out.print("Masukkan harga beli :");
+						int editbeli = i.nextInt();
+						
+						String sbb = (String)brg.elementAt(editnama-1).elementAt(0);
+						brg.setElementAt(tbarang(sbb,editjual,editbeli),editnama-1);
+						break;
+					
+					case 7:
+						System.out.print("Masukkan Nama Makanan Yg Dicari: ");
+						String cari = "a";
+						cari = i.next();
+						
+						int in = 0;
+						int z = 0;
+						System.out.print("Hasil : ");
+						
+						do
+							{
+							String con = (String)brg.elementAt(in).elementAt(0);
+							if(con.toLowerCase().contains(cari.toLowerCase()) == true)
+								{
+									System.out.println((String)brg.elementAt(in).elementAt(0) + " @" +(String)brg.elementAt(in).elementAt(1));
+									z = 1;
+								}
+							in++;
+							}
+						
+						while(in<brg.size());
+						if(z == 0)
+							{
+								System.out.println("Data tidak ada !");
+							}
+						break;
+					
+					case 8:
+						if (stransaksi.equals("kosong"))
+							{
+								System.out.println("Tidak ada data penjualan");
+							}
+						else
+							{
+							System.out.println("Histori Belanja");
+							garis();
+							for(int f=0 ; f<histori.size(); f++)
+								{
+								garis();
+								System.out.println("Kode Transaksi " + "\t" + ": " +histori.elementAt(f).elementAt(0));
+								System.out.println("Waktu " + "\t" + "\t" + ": " +histori.elementAt(f).elementAt(1));
+								System.out.println("Barang " + "\t" + "\t" + ": " +histori.elementAt(f).elementAt(2));
+								System.out.println("Jumlah " + "\t" + "\t" + ": " +histori.elementAt(f).elementAt(3));
+								}
+							}
+						break;
+					
+					case 9:
+						logout = 1;
+						break;
+					
+					case 10:
+						logout = 1;
+						keluar = 1;
+						break;
+					}
+				}
+			}
+		}
+	}import java.util.*;
+import java.io.*;
+import java.text.*;
+import java.math.*;
+
+public class mcdonald
+	{
+	public static Vector<Vector> brg = new Vector<Vector>();
+	public static Vector<Vector> printstr = new Vector<Vector>();
+	public static Vector<Vector> histori = new Vector<Vector>();
+  
+	public static String [] user = {"kasir", "siti"};
+	public static String [] pass = {"kasir", "sholikah"};
+
+	public static void login()
+		{
+			int login = -1;
+			int x = 0;
+			Scanner masuk = new Scanner(System.in);
+			do
+				{
+					System.out.println("---------------------");
+					System.out.println("Login Terlebih Dahulu");
+					System.out.println("---------------------");
+					
+					System.out.print("Username : ");
+					String username = masuk.next();
+					
+					System.out.print("Password : ");
+					String password = masuk.next();
+					
+					for (x=0; x<user.length; x++)
+						{
+							if((username.equals(user[x]))&&(password.equals(pass[x])))
+								{
+									login = x;
+									garis();
+									System.out.println("  MC Donald's Semolowaru");
+								}
+						}
+				}
+			while(login == -1);
+		}
+		
+	public static Vector<Object> tbarang (String nb,int hj,int hb) //tambah barang
+		{
+			Vector <Object> barang = new Vector<Object>();
+			barang.addElement(nb);
+			barang.addElement(String.valueOf(hj)); //untuk mengkonversi ke string 
+			barang.addElement(String.valueOf(hb));
+			return barang;
+		}
+	
+	public static Vector<Object> cetak(String nb,int h,int j,int ht) //cetak struk 
+		{
+			Vector <Object> struk = new Vector<Object>();
+			struk.addElement(nb);
+			struk.addElement(h);
+			struk.addElement(j);
+			struk.addElement(ht);
+			return struk;
+		}
+	
+	public static Vector<Object> datapen(int kodebrg, String tgl, String bar, int jmlbrg) //data penjualan
+		{
+			Vector <Object> datapenj = new Vector<Object>();
+			datapenj.addElement(kodebrg);
+			datapenj.addElement(tgl);
+			datapenj.addElement(bar);
+			datapenj.addElement(jmlbrg);
+			return datapenj;
+		}
+	
+	public static String getTanggal() 
+		{  
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");  
+			Date date = new Date();  
+			return dateFormat.format(date);  
+		}  
+	
+	public static void garis()
+		{
+			System.out.println("*************************");
+		}
+		
+	public static void garis2()
+		{
+			System.out.println("=========================");
+		}
+	
+	public static void main(String[]args) throws IOException
+		{
+		BufferedReader ii = new BufferedReader(new InputStreamReader(System.in));
+		Scanner i = new Scanner(System.in);
+		
+		Vector<Vector> v = new Vector<Vector>();
+		brg.addElement(tbarang("Burger",20000,18000));
+		brg.addElement(tbarang("Pizza",45000,43000));
+		brg.addElement(tbarang("IceCream",9000,7500));
+		
+		int jumbrg = brg.size();
+		int jml = 0;
+		int logout = 0;
+		int untung = 0 ;
+		int keluar = 0;
+		int b = 0;
+		String stransaksi = "x"; //untuk menyimpan transaksi
+		
+		while(keluar == 0)
+			{
+			login();
+			logout = 0;
+			while(logout == 0)
+				{
+				garis();
+				System.out.println("1. Beli Makanan");
+				System.out.println("2. Tambah Data Makanan");
+				System.out.println("3. Hapus Data Makanan");
+				System.out.println("4. Cek Data Makanan");
+				System.out.println("5. Pendapatan Mc Donald's");
+				System.out.println("6. Edit Data Makanan");
+				System.out.println("7. Cari Data Makanan");
+				System.out.println("8. Data Penjualan Mc Donald's");
+				System.out.println("9. Log Out");
+				System.out.println("10. Keluar");
+				
+				System.out.print("Masukkan pilihan (1 - 10) : ");
+				int pilihan = i.nextInt();
+				System.out.println("----------------------------");
+				
+				switch (pilihan)
+					{
+					case 1:
+						Vector<String> struk = new Vector<String>();
+						int lagi = 1;
+						String tanggal ="tgl"; //harus di deklarasikan
+						
+						int kodebrg = 0;
+						kodebrg = (int)(Math.random()*10000);
+						
+						int t = 0;
+						garis();
+						System.out.println("      Daftar Makanan");
+						garis();
+						System.out.println();
+						for (int a = 0 ; a < jumbrg ; a++)
+							{
+							System.out.print(a+1 +". ");
+							System.out.print(brg.elementAt(a).elementAt(0) + "\t" +" Rp " +brg.elementAt(a).elementAt(1));
+							System.out.println();
+							}
+						garis();
+						while(lagi == 1)
+						{
+							System.out.print("Masukkan nomor makanan yg akan dibeli : ");
+							int nomorbar = i.nextInt()-1;
+							
+							System.out.print("Masukkan jumlah makanan yg akan dibeli : ");
+							int jmlbar = i.nextInt();
+							
+							int totalhrg = jmlbar * Integer.valueOf((String) brg.elementAt(nomorbar).elementAt(1));
+
+							printstr.addElement(cetak((String)brg.elementAt(nomorbar).elementAt(0) /*namabrg*/, 
+										  Integer.valueOf((String)brg.elementAt(nomorbar).elementAt(1)) /*hargabrg*/,
+										  jmlbar /*jumlahbrg*/,
+										  totalhrg /*totalhargaperbrg*/));	//penyimpanan transaksi
+							
+							System.out.println(brg.elementAt(nomorbar).elementAt(0) +" " +jmlbar +" porsi : " +totalhrg);
+							
+							t += totalhrg;
+							
+							untung += jmlbar * (Integer.valueOf((String) brg.elementAt(nomorbar).elementAt(1)) - Integer.valueOf((String) brg.elementAt(nomorbar).elementAt(2)));
+						
+							histori.addElement(datapen(kodebrg,getTanggal(),(String)brg.elementAt(nomorbar).elementAt(0),jmlbar));
+							
+							int lg = 0;
+							while (lg==0)
+								{
+									System.out.print("Apakah anda ingin beli lagi? (1 = YA _ 0 = TIDAK) --> ");
+									lagi = i.nextInt();
+									if((lagi == 0) || (lagi==1))
+										{
+											lg = 1;
+										}
+									else
+										{
+											System.out.print("Angka yang anda masukkan salah");
+											lg=0;
+										}
+								}
+						}
+							garis();
+							System.out.println("  Struk Pembelian ");
+							garis();
+							
+							while( b < printstr.size())
+								{
+								stransaksi = (printstr.elementAt(b).elementAt(0) +" (" +printstr.elementAt(b).elementAt(2) +") " +"\t" +" = " +printstr.elementAt(b).elementAt(3));
+								System.out.println(printstr.elementAt(b).elementAt(0) +" (" +printstr.elementAt(b).elementAt(2) +") " +"\t" +" = " +printstr.elementAt(b).elementAt(3));
+								b++;
+								tanggal = getTanggal();
+								}
+						garis();
+						System.out.println("Total " +"\t" +"\t" +" = "+t);
+						garis2();
+
+						System.out.println(tanggal);
+						System.out.println("Kode Transaksi : "+kodebrg);
+						break;
+					
+					case 2:
+						System.out.print("Masukkan Jumlah Makanan Baru : ");
+						jml = i.nextInt();
+						
+						jumbrg += jml;
+						for (int a = 0 ; a < jml ; a++)
+							{
+								System.out.print("Masukkan Nama Makanan : ");
+								String nb = i.next();
+								System.out.print("Masukkan Harga Jual :");
+								int hj = i.nextInt();
+								System.out.print("Masukkan Harga Beli :");
+								int hb = i.nextInt();
+							
+								brg.addElement(tbarang(nb,hj,hb));
+							}
+						break;
+					
+					case 3:
+						System.out.println("      Menu Makanan");
+						garis();
+						System.out.println();
+						for (int a = 0 ; a < jumbrg ; a++)
+							{
+							System.out.print(a+1 +"  ");
+							System.out.print(brg.elementAt(a).elementAt(0) + "\t" +" @Rp " +brg.elementAt(a).elementAt(1));
+							System.out.println();
+							}
+						garis();
+						lagi = 1;
+						while (lagi == 1)
+							{
+								System.out.print("Masukkan no makanan yg akan dihapus : ");
+								int hapus = i.nextInt()-1;
+								jumbrg -= 1;
+								brg.removeElementAt(hapus);
+								int lg = 0;
+								while (lg==0)
+									{
+										System.out.print("Apakah akan menghapus lagi ? (1 = YA _ 0 = TIDAK) --> ");
+										lagi = i.nextInt();
+										if((lagi == 0) || (lagi==1))
+											{
+												lg = 1;
+											}
+										else
+											{
+												System.out.print("Angka yang anda masukkan salah");
+												lg=0;
+											}
+									}
+							}
+						break;
+					
+					case 4:
+						garis();
+						System.out.println("      Daftar Makanan");
+						garis();
+						System.out.print("No ");
+						System.out.print("Nama Makanan     " +"\t");
+						System.out.print("Harga Jual" +"\t");
+						System.out.println("Harga Beli");
+						
+						for (int a = 0 ; a < jumbrg ; a++)
+							{
+								System.out.print(a+1 +". ");
+								for (b = 0 ; b < brg.elementAt(a).size() ; b++)
+									{	
+										System.out.print(brg.elementAt(a).elementAt(b) + "\t" + "\t");
+									}
+								System.out.println();
+							}
+						
+						System.out.println();
+						System.out.print("Tekan enter untuk kembali");
+						ii.readLine();
+						break;
+					
+					case 5:
+						garis();
+						System.out.println("Laba bersih : Rp " +untung);
+						garis();
+						break;
+					
+					case 6:
+						System.out.println("      Daftar Makanan");
+						garis();
+						System.out.println();
+						for (int a = 0 ; a < jumbrg ; a++)
+							{
+							System.out.print(a+1 +". ");
+							System.out.print(brg.elementAt(a).elementAt(0) + "\t" +" @Rp " +brg.elementAt(a).elementAt(1));
+							System.out.println();
+							}
+						garis();
+						System.out.print("Masukkan no makanan yang akan diedit :");
+						int editnama = i.nextInt();
+						System.out.print("Masukkan harga jual :");
+						int editjual = i.nextInt();
+						System.out.print("Masukkan harga beli :");
+						int editbeli = i.nextInt();
+						
+						String sbb = (String)brg.elementAt(editnama-1).elementAt(0);
+						brg.setElementAt(tbarang(sbb,editjual,editbeli),editnama-1);
+						break;
+					
+					case 7:
+						System.out.print("Masukkan Nama Makanan Yg Dicari: ");
+						String cari = "a";
+						cari = i.next();
+						
+						int in = 0;
+						int z = 0;
+						System.out.print("Hasil : ");
+						
+						do
+							{
+							String con = (String)brg.elementAt(in).elementAt(0);
+							if(con.toLowerCase().contains(cari.toLowerCase()) == true)
+								{
+									System.out.println((String)brg.elementAt(in).elementAt(0) + " @" +(String)brg.elementAt(in).elementAt(1));
+									z = 1;
+								}
+							in++;
+							}
+						
+						while(in<brg.size());
+						if(z == 0)
+							{
+								System.out.println("Data tidak ada !");
+							}
+						break;
+					
+					case 8:
+						if (stransaksi.equals("kosong"))
+							{
+								System.out.println("Tidak ada data penjualan");
+							}
+						else
+							{
+							System.out.println("Histori Belanja");
+							garis();
+							for(int f=0 ; f<histori.size(); f++)
+								{
+								garis();
+								System.out.println("Kode Transaksi " + "\t" + ": " +histori.elementAt(f).elementAt(0));
+								System.out.println("Waktu " + "\t" + "\t" + ": " +histori.elementAt(f).elementAt(1));
+								System.out.println("Barang " + "\t" + "\t" + ": " +histori.elementAt(f).elementAt(2));
+								System.out.println("Jumlah " + "\t" + "\t" + ": " +histori.elementAt(f).elementAt(3));
+								}
+							}
+						break;
+					
+					case 9:
+						logout = 1;
+						break;
+					
+					case 10:
+						logout = 1;
+						keluar = 1;
+						break;
+					}
+				}
+			}
+		}
+	}
